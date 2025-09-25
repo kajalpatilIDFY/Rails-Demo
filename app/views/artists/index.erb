@@ -1,0 +1,6 @@
+<h2>Here are all the cool and talented Artists!</h2>
+    <ul>
+        <% @artists.each do |artist| %>
+        <li> <%= link_to artist.name, artist %> </li>
+        <% end %>
+    <ul>
