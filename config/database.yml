@@ -23,6 +23,8 @@ default: &default
 development:
   <<: *default
   database: todo_app_development
+  username: <%= ENV.fetch("PG_USER", "postgres") %>
+  password: <%= ENV["PG_PASSWORD"] %>
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
