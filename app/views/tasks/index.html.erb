@@ -1,27 +1,53 @@
-<h1>Your Tasks</h1>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-semibold">Your Tasks</h1>
+  <div class="space-x-2">
+    <%= link_to "New Task", new_task_path, class: "inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-600 text-white hover:bg-sky-700" %>
+  </div>
+</div>
 
-<%= link_to "New Task", new_task_path %>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Due</th>
-      <th>Completed</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tasks.each do |task| %>
+<div class="bg-white shadow sm:rounded-lg overflow-hidden">
+  <table class="min-w-full divide-y divide-slate-200">
+    <thead class="bg-slate-50">
       <tr>
-        <td><%= link_to task.title, task_path(task) %></td>
-        <td><%= task.due_date || "-" %></td>
-        <td><%= task.completed? ? "✔" : "—" %></td>
-        <td>
-          <%= link_to "Edit", edit_task_path(task) %> |
-          <%= link_to "Delete", task_path(task), method: :delete, data: { confirm: "Are you sure?" } %>
-        </td>
+        <th class="px-6 py-3 text-left text-sm font-medium text-slate-500">Title</th>
+        <th class="px-6 py-3 text-left text-sm font-medium text-slate-500 hidden sm:table-cell">Due</th>
+        <th class="px-6 py-3 text-left text-sm font-medium text-slate-500">Status</th>
+        <th class="px-6 py-3 text-right text-sm font-medium text-slate-500">Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody class="bg-white divide-y divide-slate-200">
+      <% @tasks.each do |task| %>
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-slate-900"><%= link_to task.title, task_path(task), class: "hover:underline" %></div>
+            <% if task.description.present? %>
+              <div class="text-sm text-slate-500 hidden md:block"><%= truncate(task.description, length: 100) %></div>
+            <% end %>
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+            <div class="text-sm text-slate-700"><%= task.due_date.present? ? task.due_date.strftime("%b %d, %Y") : "-" %></div>
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            <% if task.completed? %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span>
+            <% else %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Open</span>
+            <% end %>
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <%= link_to "Edit", edit_task_path(task), class: "text-sky-600 hover:underline mr-3" %>
+            <%= link_to "Delete", task_path(task), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @tasks.empty? %>
+    <div class="p-6 text-center text-sm text-slate-500">No tasks yet. Create your first task!</div>
+  <% end %>
+</div>

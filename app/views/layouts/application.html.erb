@@ -4,34 +4,55 @@
     <title>TodoApp</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
-    <header>
-      <nav>
-        <% if logged_in? %>
-          <span>Signed in as <%= current_user.email %></span>
-          |
-          <%= link_to "Tasks", tasks_path %>
-          |
-          <%= link_to "New Task", new_task_path %>
-          |
-          <%= button_to "Logout", logout_path, method: :delete %>
-        <% else %>
-          <%= link_to "Login", login_path %> |
-          <%= link_to "Sign up", signup_path %>
-        <% end %>
-      </nav>
+  <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <header class="bg-white shadow">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3">
+            <a href="<%= root_path %>" class="text-xl font-semibold text-sky-600">TodoApp</a>
+            <span class="text-sm text-slate-500 hidden sm:inline">Manage your task list</span>
+          </div>
+
+          <nav class="flex items-center space-x-3 text-sm">
+            <% if logged_in? %>
+              <span class="text-slate-600 mr-2 hidden md:inline">Signed in as <strong><%= current_user.email %></strong></span>
+              <%= link_to "Tasks", tasks_path, class: "px-3 py-1 rounded-md hover:bg-slate-100" %>
+              <%= link_to "New Task", new_task_path, class: "px-3 py-1 rounded-md bg-sky-600 text-white hover:bg-sky-700" %>
+              <%= button_to "Logout", logout_path, method: :delete, class: "px-3 py-1 rounded-md border border-slate-200 hover:bg-slate-100" %>
+            <% else %>
+              <%= link_to "Login", login_path, class: "px-3 py-1 rounded-md hover:bg-slate-100" %>
+              <%= link_to "Sign up", signup_path, class: "px-3 py-1 rounded-md bg-sky-600 text-white hover:bg-sky-700" %>
+            <% end %>
+          </nav>
+        </div>
+      </div>
     </header>
 
-    <% flash.each do |type, message| %>
-      <div class="flash <%= type %>"><%= message %></div>
-    <% end %>
+    <main class="py-10">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    <main>
-      <%= yield %>
+        <% flash.each do |type, message| %>
+          <% # map rails flash types to Tailwind styles %>
+          <% klass = case type.to_s %>
+                    <% when "notice" then "bg-green-50 border-green-200 text-green-800" %>
+                    <% when "alert"  then "bg-red-50 border-red-200 text-red-800" %>
+                    <% else "bg-blue-50 border-blue-200 text-blue-800" %>
+                    <% end %>
+
+          <div class="mb-4 border-l-4 p-3 <%= klass %> rounded">
+            <p class="text-sm"><%= message %></p>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
     </main>
+
   </body>
 </html>

@@ -1,2 +1,28 @@
-<h1>Tasks#show</h1>
-<p>Find me in app/views/tasks/show.html.erb</p>
+<div class="bg-white shadow sm:rounded-lg p-6">
+  <div class="flex justify-between items-start">
+    <div>
+      <h1 class="text-2xl font-semibold"><%= @task.title %></h1>
+      <p class="mt-2 text-sm text-slate-500"><%= @task.description.presence || "No description" %></p>
+
+      <dl class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-slate-600">
+        <div>
+          <dt class="font-medium">Due date</dt>
+          <dd><%= @task.due_date.present? ? @task.due_date.strftime("%B %d, %Y") : "-" %></dd>
+        </div>
+
+        <div>
+          <dt class="font-medium">Status</dt>
+          <dd><%= @task.completed? ? "Completed" : "Open" %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="text-right">
+      <%= link_to "Edit", edit_task_path(@task), class: "inline-flex items-center px-3 py-2 rounded-md bg-sky-600 text-white hover:bg-sky-700" %>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%= link_to "Back to tasks", tasks_path, class: "text-sm text-slate-500 hover:underline" %>
+  </div>
+</div>

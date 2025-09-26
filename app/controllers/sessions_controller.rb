@@ -3,7 +3,6 @@ class SessionsController < ApplicationController
   end
 
   def create
-    # params come in as session[email] and session[password] per the form we'll create
     user = User.find_by("lower(email) = ?", params.dig(:session, :email).to_s.downcase)
     if user&.authenticate(params.dig(:session, :password))
       session[:user_id] = user.id

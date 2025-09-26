@@ -64,3 +64,5 @@ end
 
 gem "bcrypt", "~> 3.1.18"
 gem "dotenv-rails"
+
+gem "tailwindcss-rails", "~> 4.3"
